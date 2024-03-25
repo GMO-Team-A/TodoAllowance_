@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  # next:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.next # Next.jsアプリ用のDockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - express
+  #     - db
+
+  # express:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.express # Express.jsアプリ用のDockerfile
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     - db
+
+  db:
+    image: mysql:8
+    container_name: todoallowance
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      TZ: ${TZ}
+    ports:
+        - 3306:3306
+    volumes:
+        - db-store:/var/lib/mysql
+        - ./conf/my.cnf:/etc/mysql/conf.d/my.cnf
+        - ./initdb.d:/docker-entrypoint-initdb.d
+volumes:
+  db-store:
